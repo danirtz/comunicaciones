@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {% block stylesheets %}
+			<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		{% endblock %}
+
+        <title>{% block title %}Listado de comunicaciones{% endblock %}</title>
+    </head>
+
+    <body>
+        {% block body %}
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<h1 class="text-center">Listado de comunicaciones</h1>
+					</div>
+				</div>
+
+				<div class="row justify-content-center">
+					<div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-6">
+						<div class="list-group">
+							{% if contacts %}
+								{% for contact in contacts %}
+									<div href="#" class="list-group-item">
+										{% if contact.name %}
+											<div class="d-flex w-100 justify-content-between">
+												<h5 class="mb-1">{{ contact.name }}</h5>
+												<small>{{ contact.phoneNumber }}</small>
+											</div>
+										{% else %}
+											<div class="d-flex w-100 justify-content-between">
+												<h5 class="mb-1">{{ contact.phoneNumber }}</h5>
+											</div>
+										{% endif %}
+
+										<ul class="mb-1">
+											{% for communication in contact.communications %}
+												{% if communication.classname is same as('Call') %}
+													<li>
+														{{ communication.timestamp }}: llamada
+														{{ communication.isIncoming ? 'entrante' : 'saliente' }}
+														de {{ communication.duration }} segundos.
+													</li>
+												{% elseif communication.classname is same as('SMS') %}
+													<li>
+														{{ communication.timestamp }}: mensaje
+														{{ communication.isIncoming ? 'entrante' : 'saliente' }}.
+														</li>
+												{% endif %}
+											{% endfor %}
+										</ul>
+									</div>
+								{% endfor %}
+							{% else %}
+								<p class="text-center">No se han encontrado registros.</p>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endblock %}
+
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
